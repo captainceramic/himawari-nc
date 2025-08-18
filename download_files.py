@@ -34,6 +34,7 @@ EXAMPLE_DATE = dt.datetime(2024, 4, 2, 16, 0, 0)
 # Himawari-9 data starts on the 28th of October 2022
 HIMAWARI_8_BUCKET = "noaa-himawari8"
 HIMAWARI_9_BUCKET = "noaa-himawari9"
+SWITCH_DATE = dt.datetime(2022, 10, 28)
 
 # There is a set pattern to grab the data files.
 OBJECT_NAME_PATTERN = ("AHI-L1b-FLDK/{year}/{month}/{day}/{hour}{minute}/"
@@ -57,10 +58,10 @@ def get_object_name_dict(download_datetime: dt.datetime, obs_band: int) -> dict:
         'day': download_datetime.strftime('%d'),
         'hour': download_datetime.strftime('%H'),
         'minute': download_datetime.strftime('%M'),
-        'satellite_code': 'H08' if download_datetime < dt.datetime(2022, 10, 28) else 'H09',
+        'satellite_code': 'H08' if download_datetime < SWITCH_DATE else 'H09',
         'band': f'B{obs_band:02d}',
         'resolution': resolution,
-        'bucket_name': HIMAWARI_8_BUCKET if download_datetime < dt.datetime(2022, 10, 28) else HIMAWARI_9_BUCKET
+        'bucket_name': HIMAWARI_8_BUCKET if download_datetime < SWITCH_DATE else HIMAWARI_9_BUCKET
     }
 
 
