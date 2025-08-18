@@ -24,6 +24,8 @@ import datetime as dt
 from botocore import UNSIGNED
 from botocore.config import Config
 import boto3
+from pathlib import Path
+from botocore.client import BaseClient
 
 
 EXAMPLE_DATE = dt.datetime(2024, 4, 2, 16, 0, 0)
@@ -36,6 +38,9 @@ HIMAWARI_9_BUCKET = "noaa-himawari9"
 # There is a set pattern to grab the data files.
 OBJECT_NAME_PATTERN = ("AHI-L1b-FLDK/{year}/{month}/{day}/{hour}{minute}/"
     "HS_{satellite_code}_{year}{month}{day}_{hour}{minute}_{band}_FLDK_{resolution}_S0101.DAT.bz2")
+
+DATA_DIR = Path("data")
+DATA_DIR.mkdir(exist_ok=True)
 
 
 # For the given date, construct a dictionary of the required files
@@ -59,14 +64,13 @@ def get_object_name_dict(download_datetime: dt.datetime, obs_band: int) -> dict:
     }
 
 
-def download_files_for_date(download_datetime: dt.datetime,
-                            s3_client) -> None:
+def download_files_for_date(download_datetime: dt.datetime, s3_client: BaseClient) -> None:
     """ For the given date, download the 6 required band files. """
     for band in range(1, 7):
         object_name_dict = get_object_name_dict(download_datetime, band)
         object_name = OBJECT_NAME_PATTERN.format(**object_name_dict)
 
-        output_file_name = os.path.join("data", os.path.basename(object_name))
+        output_file_name = DATA_DIR / os.path.basename(object_name)
         if not os.path.exists(output_file_name):
             print(f"Downloading {object_name}")
             with open(output_file_name, 'wb') as f:
