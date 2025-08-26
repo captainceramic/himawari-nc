@@ -10,7 +10,7 @@ See: https://aws.amazon.com/marketplace/pp/prodview-eu33kalocbhiw#resources
 Dataset information can be found here:
 https://www.data.jma.go.jp/mscweb/en/himawari89/cloud_service/fig/HimawariCloud_Data_Set_Information.pdf
 
-Note: There are official netCDF files available for download from JMA.
+Note: There are official netCDF files available for download from JMA. Here I am grabbing them from JAXA.
 
 All data downloaded should be attributed as described in the linked documentation.
 
